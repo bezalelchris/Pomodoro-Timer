@@ -1,29 +1,140 @@
+:root {
+  --focus-bg: #d9452f;
+  --short-bg: #2f7f73;
+  --long-bg: #36458f;
+  --ink: #fff8f4;
+  --soft: rgb(255 255 255 / 0.72);
+  --faint: rgb(255 255 255 / 0.22);
+  --bg: var(--focus-bg);
+}
+
+body[data-mode="short"] { --bg: var(--short-bg); }
+body[data-mode="long"] { --bg: var(--long-bg); }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --focus-bg: #8f2b1d;
+    --short-bg: #1d554d;
+    --long-bg: #252f66;
+  }
+}
+
+* { box-sizing: border-box; }
+
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Bricolage Grotesque", system-ui, sans-serif;
+  transition: background-color 0.6s ease;
 }
 
-.container {
+.app {
+  width: min(440px, 100%);
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+.modes {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.16);
+}
+
+.modes button {
+  border: 0;
+  background: transparent;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: var(--soft);
+}
+
+.modes button[aria-selected="true"] { background: var(--ink); color: var(--bg); }
+
+/* The dial is the one bold element */
+.dial { position: relative; width: min(340px, 82vw); aspect-ratio: 1; }
+.dial svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+.track, .progress { fill: none; stroke-width: 6; }
+.track { stroke: var(--faint); }
+.progress {
+  stroke: var(--ink);
+  stroke-linecap: round;
+  stroke-dasharray: 565.49;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1s linear;
+}
+
+.readout {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
   text-align: center;
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(1, 1, 1, 0.1);
 }
 
-#timer {
-  font-size: 64px;
-  margin: 20px 0;
+.time {
+  margin: 0;
+  font-size: clamp(4rem, 19vw, 6.25rem);
+  font-weight: 800;
+  font-variation-settings: "opsz" 96;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
-.buttons button {
-  font-size: 16px;
-  padding: 10px 20px;
-  margin: 5px;
-  cursor: pointer;
+.status { margin: 10px 0 0; color: var(--soft); font-size: 1.0625rem; }
+
+.controls { display: flex; align-items: center; gap: 20px; }
+
+.main-btn {
+  min-width: 156px;
+  padding: 16px 28px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 1.25rem;
+  font-weight: 800;
+  box-shadow: 0 6px 0 rgb(0 0 0 / 0.18);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.main-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgb(0 0 0 / 0.18); }
+
+.icon-btn {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--faint);
+  border-radius: 50%;
+  background: transparent;
+}
+.icon-btn:hover { border-color: var(--soft); }
+.icon-btn svg { width: 22px; height: 22px; }
+
+.sessions { text-align: center; }
+.dots { display: flex; gap: 10px; justify-content: center; margin: 0; padding: 0; list-style: none; }
+.dots li { width: 12px; height: 12px; border-radius: 50%; border: 2px solid var(--soft); }
+.dots li.done { background: var(--ink); border-color: var(--ink); }
+.session-count { margin: 10px 0 0; color: var(--soft); font-size: 0.9375rem; }
+
+.keys { margin: 0; color: var(--soft); font-size: 0.8125rem; }
+
+@media (hover: none) { .keys { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  body, .progress, .main-btn { transition: none; }
 }

@@ -2,19 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pomodoro Timer</title>
+  <meta name="description" content="A focus timer with 25-minute sessions, short and long breaks, and a chime when time's up.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div class="container">
-    <h1>Pomodoro Timer</h1>
-    <div id="timer">25:00</div>
-    <div class="buttons">
-      <button id="start">Start</button>
-      <button id="pause">Pause</button>
-      <button id="reset">Reset</button>
+<body data-mode="focus">
+  <main class="app">
+    <nav class="modes" role="tablist" aria-label="Timer mode">
+      <button role="tab" data-mode="focus" aria-selected="true">Focus</button>
+      <button role="tab" data-mode="short" aria-selected="false">Short break</button>
+      <button role="tab" data-mode="long" aria-selected="false">Long break</button>
+    </nav>
+
+    <div class="dial">
+      <svg viewBox="0 0 200 200" aria-hidden="true">
+        <circle class="track" cx="100" cy="100" r="90"></circle>
+        <circle id="progress" class="progress" cx="100" cy="100" r="90"></circle>
+      </svg>
+      <div class="readout">
+        <p id="time" class="time" role="timer" aria-live="off">25:00</p>
+        <p id="status" class="status">Time to focus</p>
+      </div>
     </div>
-  </div>
+
+    <div class="controls">
+      <button id="reset" class="icon-btn" type="button" aria-label="Reset timer" title="Reset (R)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4h4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button id="toggle" class="main-btn" type="button">Start</button>
+      <button id="skip" class="icon-btn" type="button" aria-label="Skip to next session" title="Skip (N)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5l9 7-9 7V5zM18 5v14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <div class="sessions">
+      <ol id="dots" class="dots" aria-label="Focus sessions this round"></ol>
+      <p id="session-count" class="session-count"></p>
+    </div>
+
+    <p class="keys">Space to start or pause · R to reset · N to skip</p>
+  </main>
+
   <script src="script.js"></script>
 </body>
 </html>
